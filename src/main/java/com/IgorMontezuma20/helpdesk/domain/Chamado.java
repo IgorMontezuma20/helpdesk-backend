@@ -24,22 +24,21 @@ public class Chamado implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	private String titulo;
-	private String observacoes;
-	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataAbertura = LocalDate.now();
-	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataFechamento;
-	
+
+
 	private Prioridade prioridade;
 	private Status status;
-	
+	private String titulo;
+	private String observacoes;
+
 	@ManyToOne
 	@JoinColumn(name = "tecnico_id")
 	private Tecnico tecnico;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
@@ -47,15 +46,17 @@ public class Chamado implements Serializable{
 	public Chamado() {
 		super();
 	}
-
-	public Chamado(Integer id, String titulo, String observacoes, Prioridade prioridade, Status status, Tecnico tecnico,
-			Cliente cliente) {
+	
+	
+	public Chamado(Integer id, Prioridade prioridade, Status status,
+			String titulo, String observacoes, Tecnico tecnico, Cliente cliente) {
 		super();
 		this.id = id;
-		this.titulo = titulo;
-		this.observacoes = observacoes;
+		
 		this.prioridade = prioridade;
 		this.status = status;
+		this.titulo = titulo;
+		this.observacoes = observacoes;
 		this.tecnico = tecnico;
 		this.cliente = cliente;
 	}
