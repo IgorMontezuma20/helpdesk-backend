@@ -19,8 +19,6 @@ import javax.persistence.Id;
 import com.IgorMontezuma20.helpdesk.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import net.bytebuddy.agent.builder.AgentBuilder.PoolStrategy.Eager;
-
 @Entity
 public abstract class Pessoa implements Serializable{
 	
