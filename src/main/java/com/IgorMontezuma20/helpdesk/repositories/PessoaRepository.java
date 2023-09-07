@@ -1,9 +1,14 @@
 package com.IgorMontezuma20.helpdesk.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.IgorMontezuma20.helpdesk.domain.Cliente;
+import com.IgorMontezuma20.helpdesk.domain.Pessoa;
 
-public interface PessoaRepository extends JpaRepository<Cliente, Integer>{
 
+public interface PessoaRepository extends JpaRepository<Pessoa, Integer>{
+
+	Optional<Pessoa> findByCpf(String cpf);
+	Optional<Pessoa> findByEmail(String email);
 }
