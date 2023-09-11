@@ -30,6 +30,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] PUBLIC_MATCHERS = {"/h2-console/**"};
+
+	private static final String[] PUBLIC_MATCHERS_TOKEN = {"https://clean-tax-production.up.railway.app/login"};
 	
 	@Autowired
 	private Environment env;
@@ -54,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		
 		http.authorizeRequests()
-		.antMatchers(PUBLIC_MATCHERS).permitAll()
+		.antMatchers(PUBLIC_MATCHERS).permitAll().antMatchers(PUBLIC_MATCHERS_TOKEN).permitAll()
 		.anyRequest().authenticated();
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
