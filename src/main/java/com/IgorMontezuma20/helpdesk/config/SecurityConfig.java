@@ -4,13 +4,17 @@ package com.IgorMontezuma20.helpdesk.config;
 
 import java.util.Arrays;
 
+import com.IgorMontezuma20.helpdesk.security.JWTAuthenticationFilter;
+import com.IgorMontezuma20.helpdesk.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,6 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private JWTUtil jwtUtil;
+
+	@Autowired
+	private UserDetailsService userDetailsService;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -36,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		}
 		
 		http.cors().and().csrf().disable();
+		http.addFilter(new JWTAuthenticationFilter( authenticationManager(),jwtUtil));
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC_MATCHERS).permitAll()
@@ -43,7 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+	}
+
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
