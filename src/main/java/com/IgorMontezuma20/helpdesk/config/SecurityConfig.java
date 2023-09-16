@@ -44,12 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
+		http.cors().and().csrf().disable();
+
 		if(Arrays.asList(env.getActiveProfiles()).contains("test")){
 			http.headers().frameOptions().disable();
 		}
-		
-		http.cors().and().csrf().disable();
+
 		http.addFilter(new JWTAuthenticationFilter( authenticationManager(),jwtUtil));
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
